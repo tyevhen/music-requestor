@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CrudService } from '../services/crud.service';
-import { RestService } from '../services/rest.service';
-import {UserService} from '../services/user.service';
+import { UserService } from '../services/user.service';
+import { StorageService } from '../services/storage.service';
+import { FacebookService } from 'ngx-facebook';
+import {RestService} from '../services/rest.service';
 
 @NgModule({
   declarations: [
@@ -14,12 +15,13 @@ import {UserService} from '../services/user.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [
-    CrudService,
-    RestService,
-    UserService
+    UserService,
+    StorageService,
+    FacebookService,
+    RestService
   ],
   bootstrap: [
     AppComponent

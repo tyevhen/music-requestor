@@ -1,5 +1,6 @@
 import { API_BASE_URL } from '../values/api-config';
 import { RestService } from './rest.service';
+import { StorageService } from './storage.service';
 
 
 export class CrudService extends RestService {
@@ -7,8 +8,9 @@ export class CrudService extends RestService {
   resource: string;
 
   constructor(
+    _storage: StorageService
   ) {
-    super();
+    super(_storage);
   }
 
   view(id, parameters?: any) {

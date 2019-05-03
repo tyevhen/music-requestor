@@ -1,9 +1,14 @@
 import { CrudService } from './crud.service';
+import { StorageService } from './storage.service';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class UserService extends CrudService {
 
-  constructor() {
-   super();
+  constructor(
+    _storage: StorageService
+  ) {
+   super(_storage);
    this.resource = 'posts'
   }
 
@@ -27,7 +32,11 @@ export class UserService extends CrudService {
   async getUsers() {
     return this.list()
       .then(resp => {
-        return resp.json();
+        if (resp.ok) {
+          return resp.json();
+        } else {
+          throw new Error('Not found');
+        }
       })
       .then(data => {
         return data;
@@ -41,7 +50,11 @@ export class UserService extends CrudService {
     return this.create(object)
       .then(
         resp => {
-          return resp.json();
+          if (resp.ok) {
+            return resp.json();
+          } else {
+            throw new Error('Not found');
+          }
         }
       )
       .then(
@@ -60,7 +73,11 @@ export class UserService extends CrudService {
     return this.delete(userId)
       .then(
         resp => {
-          return resp.json();
+          if (resp.ok) {
+            return resp.json();
+          } else {
+            throw new Error('Not found');
+          }
         }
       )
       .then(
@@ -79,7 +96,11 @@ export class UserService extends CrudService {
     return this.update(userId, object)
       .then(
         resp => {
-          return resp.json();
+          if (resp.ok) {
+            return resp.json();
+          } else {
+            throw new Error('Not found');
+          }
         }
       )
       .then(

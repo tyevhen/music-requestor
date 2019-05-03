@@ -1,36 +1,39 @@
-import { FetchService } from './fetch.service';
-import { HttpHeaders } from '@angular/common/http';
+import { StorageService } from './storage.service';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class RestService {
 
-  resource: string;
-
-  constructor() {}
+  constructor(
+    public storage: StorageService
+  ) {}
 
   sendGET(url) {
     return fetch(url);
   }
 
-  sendPOST(url, object: any, isTokenRequired: boolean = false) {
+  sendPOST(url, data?: any, contentType: string = 'application/json;charset=utf-8') {
     let options = {
       method: 'POST',
-      headers: this.getHeaders(isTokenRequired),
-      body: JSON.stringify(object)
+      headers: this.getHeaders(contentType),
+      body: this.constructBody(data, contentType)
     };
     return fetch(url, options)
   }
 
-  sendPUT(url, object) {
+  sendPUT(url, data, contentType: string = 'application/json;charset=utf-8') {
     let options = {
       method: 'PUT',
-      body: JSON.stringify(object)
+      headers: this.getHeaders(contentType),
+      body: JSON.stringify(data)
     };
     return fetch(url, options)
   }
 
-  sendDELETE(url) {
+  sendDELETE(url, contentType: string = 'application/json;charset=utf-8') {
     let options = {
       method: 'DELETE',
+      headers: this.getHeaders(contentType)
     };
     return fetch(url, options)
   }
@@ -39,16 +42,24 @@ export class RestService {
     console.log('Handling error: ', error);
   }
 
-  getHeaders(isTokenRequired: boolean) {
-    let headers = {};
-    if (isTokenRequired) {
-      headers = {
-        'Content-Type': 'application/json;charset=utf-8',
-        'Authorization': 'Bearer '.concat('TOKEN777100500')
-      };
-    } else {
-      headers = { 'Content-Type': 'application/json;charset=utf-8' };
+  getHeaders(contentType) {
+    return {
+      'Content-Type': contentType,
+      'X-Auth-Token': this.getToken()
+    };
+  }
+
+  getToken() {
+    try{
+      return this.storage.get('MUUSICAT-TOKEN')
+    } catch (e) {
+      console.log('Cannot get token: ', e);
     }
-    return headers;
+  }
+
+  constructBody(data, contentType) {
+    return contentType === 'application/json;charset=utf-8'
+      ? JSON.stringify(data)
+      : data;
   }
 }
