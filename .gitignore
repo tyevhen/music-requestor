@@ -15,4 +15,4 @@
 .settings/
 *.sublime-workspace
 
-social-keys.ts
+/src/value/social-keys.ts
