@@ -4,7 +4,7 @@ import { StorageService } from './storage.service';
 import { FacebookService } from 'ngx-facebook';
 import { API_BASE_URL } from '../values/api-config';
 import { SOCIALS } from '../values/social-keys';
-
+import { GoogleAuthService } from 'ng-gapi';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,7 @@ export class AuthService extends RestService {
   constructor(
     _storage: StorageService,
     private fb: FacebookService,
+    private ggl: GoogleAuthService
   ) {
     super(_storage);
     fb.init(
@@ -24,7 +25,8 @@ export class AuthService extends RestService {
         xfbml: false,  // With xfbml set to true, the SDK will parse your page's DOM to find and initialize any social plugins that have been added using XFBML
         version: 'v2.8' // use graph api version 2.5
       }
-    )
+    );
+
   }
 
   // authorization(data)  {
@@ -56,10 +58,10 @@ export class AuthService extends RestService {
             console.log('FB authorization result: ', result);
             if (result.authResponse) {
               let accessToken = result.authResponse.accessToken;
-              console.log('Access token: ', accessToken);
+              console.log('FB access token: ', accessToken);
               return this.sendPOST(
-                'http://localhost:3000/api/v1/auth/facebook',
-                {access_token: accessToken}
+                'http://our-lovely-backend.com/api/v1',
+                { access_token: accessToken }
               )
                 .then(
                   response => {
@@ -79,6 +81,42 @@ export class AuthService extends RestService {
           }
         );
     });
+  }
+
+  gglLogin() {
+    return new Promise((resolve, reject) => {
+      this.ggl.getAuth()
+        .subscribe((auth) => {
+          auth.signIn()
+            .then(
+              result => {
+                if (result) {
+                  let accessToken = result.Zi.access_token;
+                  console.log('GGL access token: ', accessToken);
+                  return this.sendPOST(
+                    'http://our-lovely-backend.com/api/v1',
+                    { access_token: accessToken }
+                  )
+                    .then(
+                      response => {
+                        let token = response.headers.get('x-auth-token');
+                        if (token) {
+                          this.storage.store('MUUSIKAT-TOKEN', token);
+                        }
+                        resolve(response.json());
+                      }
+                    )
+                    .catch(
+                      () => reject()
+                    )
+                } else {
+                  reject();
+                }
+              }
+            )
+        })
+        .unsubscribe()
+    })
   }
 
   logout() {

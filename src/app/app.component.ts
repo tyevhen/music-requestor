@@ -79,5 +79,19 @@ export class AppComponent implements OnInit{
     );
   };
 
+  gLogin() {
+    this.auth.gglLogin()
+      .then(
+        () => {
+          console.log('Logged google');
+        }
+      )
+      .catch(
+        error => {
+          console.log(error);
+        }
+      )
+  }
+
 
 }
