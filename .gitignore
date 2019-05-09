@@ -14,3 +14,5 @@
 *.launch
 .settings/
 *.sublime-workspace
+
+social-keys.ts
