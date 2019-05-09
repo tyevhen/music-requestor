@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UserService } from '../services/user.service';
 import { StorageService } from '../services/storage.service';
-import { FacebookService } from 'ngx-facebook';
-import {RestService} from '../services/rest.service';
+import { FacebookModule, FacebookService } from 'ngx-facebook';
+import { RestService } from '../services/rest.service';
+
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import {RestService} from '../services/rest.service';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
+    FacebookModule.forRoot(),
+
   ],
   providers: [
     UserService,

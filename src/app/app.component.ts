@@ -41,13 +41,13 @@ export class AppComponent implements OnInit{
     //   }
     // );
     //
-    this.userService.addUser(
-      {}
-    ).then(
-      data => {
-        console.log('User created: ', data);
-      }
-    );
+    // this.userService.addUser(
+    //   {}
+    // ).then(
+    //   data => {
+    //     console.log('User created: ', data);
+    //   }
+    // );
     //
     // this.userService.deleteUser(1)
     //   .then(
@@ -69,4 +69,15 @@ export class AppComponent implements OnInit{
     //   }
     // )
   }
+
+  login() {
+    this.auth.fbLogin()
+      .then(
+        () => {
+        console.log('User loged in');
+      }
+    );
+  };
+
+
 }

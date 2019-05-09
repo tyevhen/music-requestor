@@ -51,7 +51,7 @@ export class RestService {
 
   getToken() {
     try{
-      return this.storage.get('MUUSICAT-TOKEN')
+      return this.storage.get('MUUSIKAT-TOKEN')
     } catch (e) {
       console.log('Cannot get token: ', e);
     }
